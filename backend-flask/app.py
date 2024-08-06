@@ -50,6 +50,7 @@ tracer = trace.get_tracer(__name__)
 app = Flask(__name__)
 
 XRayMiddleware(app, xray_recorder)
+
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 
