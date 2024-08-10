@@ -21,8 +21,7 @@ services:
     volumes:
       - ./backend-flask:/backend-flask
   frontend-react-js:
-    env_file:
-      - .env
+    
     environment:
       REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       REACT_APP_AWS_PROJECT_REGION: "ca-central-1"
