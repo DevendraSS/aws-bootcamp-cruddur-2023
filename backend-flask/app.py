@@ -57,8 +57,8 @@ processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(processor)
 
 # X-RAY ----------
-xray_url = os.getenv("AWS_XRAY_URL")
-xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+#xray_url = os.getenv("AWS_XRAY_URL")
+#xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
 
 # OTEL ----------
 # Show this in the logs within the backend-flask app (STDOUT)
@@ -77,7 +77,7 @@ cognito_jwt_token = CognitoJwtToken(
 )
 
 # X-RAY ----------
-XRayMiddleware(app, xray_recorder)
+#XRayMiddleware(app, xray_recorder)
 
 # HoneyComb ---------
 # Initialize automatic instrumentation with Flask
@@ -107,22 +107,21 @@ cors = CORS(
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
 
 def init_rollbar():
-    """Initialize Rollbar module"""
+    """init rollbar module"""
     rollbar.init(
-        # Access token
+        # access token
         rollbar_access_token,
-        # Environment name
+        # environment name
         'production',
-        # Server root directory, makes tracebacks prettier
+        # server root directory, makes tracebacks prettier
         root=os.path.dirname(os.path.realpath(__file__)),
-        # Flask already sets up logging
-        allow_logging_basic_config=False
-    )
+        # flask already sets up logging
+        allow_logging_basic_config=False)
 
-    # Send exceptions from `app` to Rollbar, using Flask's signal system
+    # send exceptions from `app` to rollbar, using flask's signal system.
     got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
-init_rollbar()
+  
 
 @app.route('/rollbar/test')
 def rollbar_test():
@@ -165,7 +164,7 @@ def data_create_message():
   return
 
 @app.route("/api/activities/home", methods=['GET'])
-@xray_recorder.capture('activities_home')
+#@xray_recorder.capture('activities_home')
 def data_home():
   access_token = extract_access_token(request.headers)
   try:
@@ -188,7 +187,7 @@ def data_notifications():
   return data, 200
 
 @app.route("/api/activities/@<string:handle>", methods=['GET'])
-@xray_recorder.capture('activities_users')
+#@xray_recorder.capture('activities_users')
 def data_handle(handle):
   model = UserActivities.run(handle)
   if model['errors'] is not None:
